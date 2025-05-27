@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin - Moderar Produtos{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto bg-white p-8 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Moderar Produtos</h2>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full leading-normal">
+            <thead>
+                <tr>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        ID
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Nome do Produto
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Proprietário
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Status
+                    </th>
+                    <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        Ações
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        {{ product.id_produto }} {# CORREÇÃO AQUI #}
+                    </td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        <a href="{{ url_for('product_detail', product_id=product.id_produto) }}" class="text-blue-600 hover:underline"> {# CORREÇÃO AQUI #}
+                            {{ product.nome }}
+                        </a>
+                    </td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        {{ product.dono.nome }}
+                    </td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        <span class="relative inline-block px-3 py-1 font-semibold leading-tight
+                            {% if product.status == 'Disponível' %}text-green-900{% elif product.status == 'Aguardando Moderação' %}text-yellow-900{% else %}text-red-900{% endif %}">
+                            <span aria-hidden="true" class="absolute inset-0 opacity-50 rounded-full
+                                {% if product.status == 'Disponível' %}bg-green-200{% elif product.status == 'Aguardando Moderação' %}bg-yellow-200{% else %}bg-red-200{% endif %}"></span>
+                            <span class="relative">{{ product.status }}</span>
+                        </span>
+                    </td>
+                    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        {% if product.status != 'Disponível' %}
+                            <form action="{{ url_for('admin_moderate_product', product_id=product.id_produto) }}" method="POST" class="inline-block mr-2"> {# CORREÇÃO AQUI #}
+                                <input type="hidden" name="action" value="approve">
+                                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-3 rounded text-xs transition duration-300">Aprovar</button>
+                            </form>
+                        {% endif %}
+                        {% if product.status != 'Reprovado' %}
+                            <form action="{{ url_for('admin_moderate_product', product_id=product.id_produto) }}" method="POST" class="inline-block mr-2"> {# CORREÇÃO AQUI #}
+                                <input type="hidden" name="action" value="reject">
+                                <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded text-xs transition duration-300">Reprovar</button>
+                            </form>
+                        {% endif %}
+                        <form action="{{ url_for('admin_moderate_product', product_id=product.id_produto) }}" method="POST" class="inline-block"> {# CORREÇÃO AQUI #}
+                            <input type="hidden" name="action" value="remove">
+                            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-xs transition duration-300" onclick="return confirm('Tem certeza que deseja remover este produto permanentemente?');">Remover</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center text-gray-600">Nenhum produto para moderação.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

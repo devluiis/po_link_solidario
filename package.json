@@ -1,0 +1,15 @@
+{
+  "name": "link-solidario",
+  "version": "1.0.0",
+  "description": "Projeto Integrador Link Solidário - Front-end",
+  "main": "index.js",
+  "scripts": {
+    "build-css": "npx tailwindcss -i ./static/src/input.css -o ./static/dist/output.css --watch"
+  },
+  "keywords": [],
+  "author": "Luís Paulo de Sousa Neto (Gerado com apoio de Gemini)",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

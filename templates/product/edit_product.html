@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Produto - Link Solidário{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold text-center mb-6 text-gray-800">Editar Produto</h2>
+    <form action="{{ url_for('edit_product', product_id=product.id_produto) }}" method="POST" enctype="multipart/form-data">
+        <div class="mb-4">
+            <label for="name" class="block text-gray-700 text-sm font-semibold mb-2">Nome do Produto:</label>
+            <input type="text" id="name" name="name" value="{{ product.nome }}" class="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+        </div>
+        <div class="mb-4">
+            <label for="description" class="block text-gray-700 text-sm font-semibold mb-2">Descrição Detalhada:</label>
+            <textarea id="description" name="description" rows="4" class="shadow-sm appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400" required>{{ product.descricao }}</textarea>
+        </div>
+        <div class="mb-4">
+            <label for="category" class="block text-gray-700 text-sm font-semibold mb-2">Categoria:</label>
+            <select id="category" name="category" class="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 rounded shadow-sm leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                <option value="">Selecione uma categoria</option>
+                {% for category_name in categories %}
+                    <option value="{{ category_name }}" {% if product.categoria == category_name %}selected{% endif %}>{{ category_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-4">
+            <label for="condition" class="block text-gray-700 text-sm font-semibold mb-2">Condição:</label>
+            <select id="condition" name="condition" class="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 rounded shadow-sm leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                <option value="">Selecione a condição</option>
+                <option value="Novo" {% if product.condicao == 'Novo' %}selected{% endif %}>Novo</option>
+                <option value="Usado - Ótimo" {% if product.condicao == 'Usado - Ótimo' %}selected{% endif %}>Usado - Ótimo</option>
+                <option value="Usado - Boa" {% if product.condicao == 'Usado - Boa' %}selected{% endif %}>Usado - Boa</option>
+                <option value="Usado - Razoável" {% if product.condicao == 'Usado - Razoável' %}selected{% endif %}>Usado - Razoável</option>
+            </select>
+        </div>
+        <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-semibold mb-2">Tipo de Transação:</label>
+            <div class="mt-2">
+                <label class="inline-flex items-center mr-6">
+                    <input type="radio" class="form-radio text-blue-600" name="trans_type" value="Troca" {% if product.tipo_transacao == 'Troca' %}checked{% endif %} required>
+                    <span class="ml-2 text-gray-700">Troca</span>
+                </label>
+                <label class="inline-flex items-center">
+                    <input type="radio" class="form-radio text-blue-600" name="trans_type" value="Doação" {% if product.tipo_transacao == 'Doação' %}checked{% endif %} required>
+                    <span class="ml-2 text-gray-700">Doação</span>
+                </label>
+            </div>
+        </div>
+        <div class="mb-6">
+            <label for="image_upload" class="block text-gray-700 text-sm font-semibold mb-2">Nova Imagem (opcional):</label>
+            {% if product.fotos %}
+                <img src="{{ product.fotos[0].url_foto }}" alt="Imagem atual do produto" class="w-32 h-32 object-cover rounded-md mb-2 border border-gray-300">
+                <p class="text-xs text-gray-500 mb-2">Imagem atual do produto.</p>
+            {% else %}
+                <p class="text-xs text-gray-500 mb-2">Nenhuma imagem atual.</p>
+            {% endif %}
+            <input type="file" id="image_upload" name="image_upload" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+            <p class="text-xs text-gray-500 mt-1">Envie uma nova imagem se desejar substituir a atual (PNG, JPG, JPEG, GIF).</p>
+        </div>
+        <div class="flex items-center justify-between">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded w-full transition duration-300 shadow-md">
+                Atualizar Produto
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

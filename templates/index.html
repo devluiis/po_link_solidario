@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Início - Link Solidário{% endblock %}
+
+{% block content %}
+<section class="text-center py-24 rounded-lg shadow-lg mb-12">
+    <h1 class="text-5xl font-extrabold text-gray-800 mb-6">Bem-vindo ao Link Solidário</h1>
+    <p class="text-xl text-gray-600 mb-10">Plataforma para doação e troca solidária de itens</p>
+    <div class="flex justify-center space-x-4">
+        <a href="{{ url_for('products_list') }}" class="bg-blue-500 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-blue-600 transition duration-300 shadow-lg">
+            Começar agora
+        </a>
+        <a href="{{ url_for('about') }}" class="bg-gray-200 text-gray-800 font-bold py-3 px-8 rounded-full text-lg hover:bg-gray-300 transition duration-300 shadow-md">
+            Saiba mais
+        </a>
+    </div>
+</section>
+
+<section class="mt-12 text-center" id="about">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
+        <div class="p-8 bg-white rounded-lg shadow-md flex flex-col items-center">
+            <div class="text-blue-500 mb-4">
+                <i class="fas fa-gift text-5xl"></i> </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">Doe o que não usa</h3>
+            <p class="text-gray-700">Transforme itens que não utiliza mais em oportunidades para outras pessoas.</p>
+        </div>
+        <div class="p-8 bg-white rounded-lg shadow-md flex flex-col items-center">
+            <div class="text-blue-500 mb-4">
+                <i class="fas fa-sync-alt text-5xl"></i> </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">Troque e Economize</h3>
+            <p class="text-gray-700">Encontre itens que precisa através de trocas solidárias com outros usuários.</p>
+        </div>
+        <div class="p-8 bg-white rounded-lg shadow-md flex flex-col items-center">
+            <div class="text-blue-500 mb-4">
+                <i class="fas fa-heart text-5xl"></i> </div>
+            <h3 class="text-xl font-semibold text-gray-800 mb-3">Impacto Social</h3>
+            <p class="text-gray-700">Contribua para uma sociedade mais consciente e solidária.</p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Sobre o Link Solidário{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Sobre o Projeto Link Solidário</h2>
+
+    <p class="text-gray-700 leading-relaxed mb-6">
+        O <b>Link Solidário</b> é uma iniciativa desenvolvida como projeto integrador do 3º período do curso de <b>Análise e Desenvolvimento de Sistemas</b> da <b>UNITINS (Universidade Estadual do Tocantins)</b>. Nosso principal objetivo é criar uma ponte digital entre comunidades do Tocantins, facilitando a <b>troca e doação de produtos</b> entre moradores, ONGs e associações comunitárias.
+    </p>
+
+    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Nossa Missão</h3>
+    <p class="text-gray-700 leading-relaxed mb-6">
+        Combater o desperdício, promover a sustentabilidade e fortalecer os laços comunitários, permitindo que itens em desuso encontrem novos propósitos e ajudem quem precisa. Acreditamos que, ao facilitar a conexão entre quem tem e quem busca, podemos gerar um impacto social positivo significativo.
+    </p>
+
+    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Como Funciona?</h3>
+    <ul class="list-disc list-inside text-gray-700 leading-relaxed mb-6">
+        <li class="mb-2"><b>Cadastro de Usuários:</b> Moradores, ONGs e associações podem se registrar em nossa plataforma.</li>
+        <li class="mb-2"><b>Anúncio de Produtos:</b> Usuários podem cadastrar produtos que desejam doar ou trocar, fornecendo descrições detalhadas e fotos.</li>
+        <li class="mb-2"><b>Busca e Filtragem:</b> Interessados podem pesquisar produtos por categoria, localização e tipo de transação (doação ou troca).</li>
+        <li class="mb-2"><b>Manifestação de Interesse:</b> Após encontrar um item, é possível manifestar interesse, iniciando a comunicação entre as partes.</li>
+        <li class="mb-2"><b>Gestão de Transações:</b> A plataforma ajuda a acompanhar o status das doações e trocas, garantindo que os itens cheguem ao seu destino.</li>
+    </ul>
+
+    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Tecnologias Utilizadas</h3>
+    <p class="text-gray-700 leading-relaxed mb-6">
+        Este projeto foi desenvolvido utilizando as seguintes tecnologias:
+    </p>
+    <ul class="list-disc list-inside text-gray-700 leading-relaxed mb-6">
+        <li class="mb-2"><b>Flask:</b> Um microframework web para Python, utilizado para o desenvolvimento do back-end.</li>
+        <li class="mb-2"><b>Jinja2:</b> Um motor de templates para Python, integrado ao Flask para renderização das páginas HTML.</li>
+        <li class="mb-2"><b>Tailwind CSS:</b> Um framework CSS "utility-first" para estilização rápida e responsiva do front-end.</li>
+        <li class="mb-2"><b>MySQL (via Flask-SQLAlchemy):</b> Sistema de gerenciamento de banco de dados relacional para persistência dos dados.</li>
+    </ul>
+
+    <div class="text-center mt-8 pt-4 border-t border-gray-200">
+        <p class="text-gray-600">Desenvolvido por Luís Paulo de Sousa Neto, Havilla Maria, Kalebi Spindola, Rie Veloso, Renan Resplandes</p>
+        <p class="text-gray-600">UNITINS - 3º Período de Análise e Desenvolvimento de Sistemas</p>
+        <p class="text-gray-600 mt-2">Versão do Projeto: 1.0.0</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Link Solidário{% endblock %}</title>
+    <link href="{{ url_for('static', filename='dist/output.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    {% block head_extra %}{% endblock %}
+</head>
+<body class="bg-gray-100 font-sans leading-normal tracking-normal flex flex-col min-h-screen">
+
+    <header class="bg-gray-800 text-white py-4 shadow-md">
+        <nav class="container mx-auto px-4 flex justify-between items-center flex-wrap">
+            <a href="{{ url_for('index') }}" class="text-2xl font-bold text-gray-100 hover:text-white transition duration-300 mb-2 md:mb-0">Link Solidário</a>
+            <div class="flex items-center space-x-4 flex-wrap justify-center md:justify-end">
+                {% if current_user %}
+                    <a href="{{ url_for('products_list') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Buscar Produtos</a>
+                    <a href="{{ url_for('add_product') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Cadastrar Produto</a>
+                    <a href="{{ url_for('profile') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Meu Perfil</a>
+                    
+                    {# Bloco da Notificação com dropdown/modal #}
+                    <div class="relative" id="notification-dropdown-container"> {# Removido inline-flex e items-center aqui para simplificar o posicionamento do sino #}
+                        <button id="notification-bell-btn" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium focus:outline-none">
+                            <i class="fas fa-bell"></i>
+                            {% if unread_notifications_count > 0 %}
+                                <span class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                    {{ unread_notifications_count }}
+                                </span>
+                            {% endif %}
+                        </button>
+                        
+                        {# Dropdown de Notificações #}
+                        <div id="notification-dropdown" class="hidden absolute right-0 mt-2 w-80 max-h-64 overflow-y-auto bg-white rounded-md shadow-lg py-1 z-20 border border-gray-200"> {# Adicionado borda para visibilidade #}
+                            <div class="px-4 py-2 text-sm text-gray-700 border-b border-gray-200 font-semibold flex justify-between items-center">
+                                Notificações Recentes
+                                <button id="close-notification-btn" class="text-gray-500 hover:text-gray-700 focus:outline-none text-xl leading-none" style="padding: 0; background: none; border: none;"> {# Estilo inline para garantir que o botão X apareça #}
+                                    &times; {# Usando o caractere HTML 'X' em vez de ícone para garantir que apareça #}
+                                </button>
+                            </div>
+                            {% if recent_notifications %}
+                                {% for notification in recent_notifications %}
+                                    <div class="block px-4 py-2 text-sm {% if not notification.lida %}bg-blue-50 text-blue-800 font-medium{% else %}text-gray-700{% endif %} hover:bg-gray-100 border-b border-gray-100 last:border-b-0">
+                                        {# Ajuste de layout para a mensagem e data #}
+                                        <p class="flex items-start break-words overflow-hidden text-wrap"> {# text-wrap para quebra de linha #}
+                                            <i class="fas fa-info-circle mr-2 mt-1 flex-shrink-0"></i>
+                                            <span class="flex-grow">{{ notification.mensagem }}</span>
+                                        </p>
+                                        <p class="text-xs text-gray-500 mt-1 pl-6">
+                                            {{ notification.data_criacao.strftime('%d/%m/%Y %H:%M') }}
+                                            {% if notification.remetente_obj %}
+                                                - De: {{ notification.remetente_obj.nome }}
+                                            {% endif %}
+                                        </p>
+                                        <div class="flex justify-end mt-2"> {# Alinha botões de ação à direita #}
+                                            {% if notification.url_redirecionamento %}
+                                                <a href="{{ notification.url_redirecionamento }}" class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-xs hover:bg-blue-300 mr-2">Ver Detalhes</a>
+                                            {% endif %}
+                                            {% if not notification.lida %}
+                                                <button type="button" class="bg-green-200 text-green-800 px-3 py-1 rounded-full text-xs hover:bg-green-300 mark-read-btn" data-notification-id="{{ notification.id_notificacao }}">Marcar como lida</button>
+                                            {% else %}
+                                                <span class="text-xs text-gray-500 px-3 py-1">Lida</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="block px-4 py-2 text-sm text-gray-500">Nenhuma notificação recente.</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <a href="{{ url_for('logout') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Sair</a>
+                    {% if current_user.tipo_perfil == 'Admin' %}
+                        <a href="{{ url_for('admin_users') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin Usuários</a>
+                        <a href="{{ url_for('admin_products') }}" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin Produtos</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="text-blue-400 hover:text-blue-300 px-3 py-2 rounded-md text-sm font-medium">Entrar</a>
+                    <a href="{{ url_for('register') }}" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition duration-300">Cadastrar</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto mt-8 px-4 flex-grow">
+        {% include 'components/flash_messages.html' %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="container mx-auto px-4 text-center text-sm">
+            <p class="text-gray-400">&copy; 2025 Link Solidário. Todos os direitos reservados.</p>
+            <p class="mt-2">
+                <a href="#" class="text-gray-400 hover:text-white mx-2">Termos de Uso</a> |
+                <a href="#" class="text-gray-400 hover:text-white mx-2">Política de Privacidade</a> |
+                <a href="#" class="text-gray-400 hover:text-white mx-2">Sobre</a>
+            </p>
+        </div>
+    </footer>
+
+    {% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationBellBtn = document.getElementById('notification-bell-btn');
+            const notificationDropdown = document.getElementById('notification-dropdown');
+            const notificationDropdownContainer = document.getElementById('notification-dropdown-container');
+            const closeNotificationBtn = document.getElementById('close-notification-btn');
+
+            if (notificationBellBtn && notificationDropdown) {
+                notificationBellBtn.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    notificationDropdown.classList.toggle('hidden');
+                });
+
+                if (closeNotificationBtn) {
+                    closeNotificationBtn.addEventListener('click', function(event) {
+                        event.stopPropagation();
+                        notificationDropdown.classList.add('hidden');
+                    });
+                }
+
+                document.addEventListener('click', function(event) {
+                    if (notificationDropdown && !notificationDropdownContainer.contains(event.target)) {
+                        notificationDropdown.classList.add('hidden');
+                    }
+                });
+            }
+
+            const markReadButtons = document.querySelectorAll('.mark-read-btn');
+            markReadButtons.forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    const notificationId = this.dataset.notificationId;
+                    const buttonElement = this;
+
+                    fetch(`/notifications/mark_read/${notificationId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const notificationElement = buttonElement.closest('.block');
+                            if (notificationElement) {
+                                notificationElement.classList.remove('bg-blue-50', 'border-blue-200', 'text-blue-800', 'font-medium');
+                                notificationElement.classList.add('bg-gray-100', 'border-gray-200', 'text-gray-600');
+                                buttonElement.remove();
+                                notificationElement.innerHTML += '<span class="text-xs text-gray-500 ml-2">Lida</span>';
+                            }
+                            window.location.reload(); 
+                        } else {
+                            alert('Erro ao marcar notificação como lida: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                        alert('Erro de rede ao marcar notificação como lida.');
+                    });
+                });
+            });
+        });
+    </script>
+    {% endblock %}
+</body>
+</html>

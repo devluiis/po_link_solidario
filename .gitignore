@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+*.egg-info/
+.pytest_cache/
+.coverage
+.tox/
+.ipynb_checkpoints
+
+# Flask
+instance/
+.flaskenv
+
+# Node.js (para Tailwind CSS)
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Tailwind CSS
+static/dist/
+
+# Dados sensíveis (adicionar se tiver)
+.env # Se você usar arquivos .env para configurações
+*.sqlite3 # Para arquivos SQLite, se usar
+/app.py # Se você tiver informações sensíveis direto no app.py que não quer versionar (o que é raro)
+
+# IDEs
+.vscode/
+.idea/
+
+# Sistema operacional
+.DS_Store # macOS
+Thumbs.db # Windows
